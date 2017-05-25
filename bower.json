@@ -1,0 +1,19 @@
+{
+  "name": "rovers",
+  "description": "",
+  "main": "",
+  "version": "0.1",
+  "authors": [
+    "Alexander Levin"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "_src"
+  ],
+  "dependencies": {
+    "jquery": "^2.2.*"
+  }
+}

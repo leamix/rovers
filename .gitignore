@@ -1,0 +1,17 @@
+.idea
+
+Thumbs.db
+.DS_Store
+/*.txt
+/composer.lock
+
+_src/
+vendor/
+public/bower/
+node_modules/
+
+!.gitignore
+runtime/
+!runtime/.gitignore
+public/bower/
+!public/bower/.gitignore
