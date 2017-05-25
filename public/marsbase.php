@@ -1,15 +1,10 @@
 <?php
 
-require "/app/CommandException.php";
-require "/app/CommandParser.php";
-require "/app/Plateau.php";
-require "/app/Coordinates.php";
-require "/app/Rover.php";
-require "/app/Base.php";
+require dirname(__DIR__) . '/vendor/autoload.php';
 
 try {
-	$base = new \app\Base();
-	$base->execute($_POST);
+	$base = new app\Base();
+	$base->execute($_POST['command']);
 	$data = [
 		'rovers' => $base->locateRovers()
 	];

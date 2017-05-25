@@ -4,18 +4,18 @@
   "minimum-stability": "dev",
   "license": "proprietary",
   "require": {
-    "php": ">=5.4.0",
-    "yiisoft/yii2": "2.0.*",
-    "fxp/composer-asset-plugin": "^1.3.0"
+    "php": ">=5.4.0"
   },
   "require-dev": {
-    "yiisoft/yii2-debug": "*"
+    "phpunit/phpunit": "^4.8"
+  },
+  "autoload": {
+    "classmap": [
+      "app"
+    ]
   },
   "provide": {
-    "bower/jquery": "*",
-    "bower/jquery.inputmask": "*",
-    "bower/punycode": "*",
-    "bower/yii2-pjax": "*"
+    "bower/jquery": "2.2.*"
   },
   "config": {
     "process-timeout": 1800,

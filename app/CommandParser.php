@@ -11,6 +11,7 @@ class CommandParser
 	public function __construct($commandBlock)
 	{
 		$this->ensureIsNotEmpty($commandBlock);
+		$this->ensureIsString($commandBlock);
 		$lines = $this->fetchCommands($commandBlock);
 		$i = 0;
 
@@ -42,7 +43,7 @@ class CommandParser
 		if (!preg_match('/^(\d+) (\d+) (N|S|E|W)$/', $position, $matches)) {
 			throw new CommandException('Rover #'.(count($this->roverPositions)+1).' position is invalid.');
 		}
-		return [$matches[1], $matches[2], $matches[3]];
+		return [(int)$matches[1], (int)$matches[2], $matches[3]];
 	}
 
 	public function parsePlateauDimensions($dimensions)
@@ -50,7 +51,7 @@ class CommandParser
 		if (!preg_match('/^(\d+) (\d+)$/', $dimensions, $matches)) {
 			throw new CommandException('Plateau dimensions are invalid.');
 		}
-		return [$matches[1], $matches[2]];
+		return [(int)$matches[1], (int)$matches[2]];
 	}
 
 	/**
@@ -60,6 +61,16 @@ class CommandParser
 	{
 		if (empty($command)) {
 			throw new CommandException('Command can not be empty.');
+		}
+	}
+
+	/**
+	 * @param string $commandBlock
+	 */
+	private function ensureIsString($commandBlock)
+	{
+		if (!is_string($commandBlock)) {
+			throw new CommandException('Command must be a string.');
 		}
 	}
 
