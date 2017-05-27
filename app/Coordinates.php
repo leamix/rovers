@@ -9,8 +9,8 @@ class Coordinates
 
 	public function __construct(array $xy)
 	{
-		$this->x = $xy[0];
-		$this->y = $xy[1];
+		$this->x = (int)$xy[0];
+		$this->y = (int)$xy[1];
 	}
 
 	public function __toString()

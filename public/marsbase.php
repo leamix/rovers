@@ -3,7 +3,7 @@
 require dirname(__DIR__) . '/vendor/autoload.php';
 
 try {
-	$base = new app\Base();
+	$base = new app\Station();
 	$base->execute($_POST['command']);
 	$data = [
 		'rovers' => $base->locateRovers()

@@ -10,9 +10,7 @@
     "phpunit/phpunit": "^4.8"
   },
   "autoload": {
-    "classmap": [
-      "app"
-    ]
+    "psr-4": {"app\\": "app/"}
   },
   "provide": {
     "bower/jquery": "2.2.*"

@@ -4,83 +4,82 @@ namespace app;
 
 class Rover
 {
-	const NORTH = 'N';
-	const SOUTH = 'S';
-	const EAST = 'E';
-	const WEST = 'W';
-
 	/**
-	 * @var Coordinates
+	 * @var RoverPosition
 	 */
-	private $coordinates;
+	private $position;
 	/**
-	 * @var string
+	 * @var Plato
 	 */
-	private $direction;
+	private $plato;
 
-	public function __construct(Coordinates $coordinates, $direction)
+	public function __construct(RoverPosition $position, Plato $plato)
 	{
-		$this->coordinates = $coordinates;
-		$this->direction = $direction;
+		$this->plato = $plato;
+		$this->position = $position;
+		$this->ensureIsNotOutOfPlato();
 	}
 
-	public function move()
+	public function move(array $instructions)
 	{
-		switch ($this->direction) {
-			case self::NORTH:
-				$this->coordinates->y += 1;
+		foreach ($instructions as $instruction) {
+			switch ($instruction) {
+				case 'M':
+					$this->moveToDirection();
+					break;
+				case 'L':
+					$this->turnLeft();
+					break;
+				case 'R':
+					$this->turnRight();
+					break;
+			}
+		}
+		$this->ensureIsNotOutOfPlato();
+	}
+
+	private function ensureIsNotOutOfPlato()
+	{
+		if ($this->position->coordinates->x < $this->plato->nullpoint->x ||
+			$this->position->coordinates->y < $this->plato->nullpoint->y ||
+			$this->position->coordinates->x > $this->plato->endpoint->x ||
+			$this->position->coordinates->y > $this->plato->endpoint->y
+		) {
+			throw new PositionException('Rover is out of plato.');
+		}
+	}
+
+	private function moveToDirection()
+	{
+		switch ($this->position->direction->getValue()) {
+			case Direction::NORTH:
+				$this->position->coordinates->y += 1;
 				break;
-			case self::SOUTH:
-				$this->coordinates->y -= 1;
+			case Direction::SOUTH:
+				$this->position->coordinates->y -= 1;
 				break;
-			case self::EAST:
-				$this->coordinates->x += 1;
+			case Direction::EAST:
+				$this->position->coordinates->x += 1;
 				break;
-			case self::WEST:
-				$this->coordinates->x -= 1;
+			case Direction::WEST:
+				$this->position->coordinates->x -= 1;
 				break;
 		}
 	}
 
-	public function turnLeft()
+	private function turnLeft()
 	{
-		switch ($this->direction) {
-			case self::NORTH:
-				$this->direction = self::WEST;
-				break;
-			case self::SOUTH:
-				$this->direction = self::EAST;
-				break;
-			case self::EAST:
-				$this->direction = self::NORTH;
-				break;
-			case self::WEST:
-				$this->direction = self::SOUTH;
-				break;
-		}
+		$this->position->direction->left();
 	}
 
-	public function turnRight()
+	private function turnRight()
 	{
-		switch ($this->direction) {
-			case self::NORTH:
-				$this->direction = self::EAST;
-				break;
-			case self::SOUTH:
-				$this->direction = self::WEST;
-				break;
-			case self::EAST:
-				$this->direction = self::SOUTH;
-				break;
-			case self::WEST:
-				$this->direction = self::NORTH;
-				break;
-		}
+		$this->position->direction->right();
 	}
 
 	public function getPosition()
 	{
-		return $this->coordinates.' '.$this->direction;
+		return (string)$this->position;
 	}
 
 	public function __toString()

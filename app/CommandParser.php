@@ -4,8 +4,17 @@ namespace app;
 
 class CommandParser
 {
-	private $plateauDimensions;
+	/**
+	 * @var Coordinates
+	 */
+	private $platoDimensions;
+	/**
+	 * @var RoverPosition[]
+	 */
 	private $roverPositions;
+	/**
+	 * @var array
+	 */
 	private $roverInstructions;
 
 	public function __construct($commandBlock)
@@ -15,27 +24,21 @@ class CommandParser
 		$lines = $this->fetchCommands($commandBlock);
 		$i = 0;
 
-		$this->plateauDimensions = $this->parsePlateauDimensions($lines[$i++]);
+		$this->parsePlatoDimensions($lines[$i++]);
+
 		while (isset($lines[$i]) && isset($lines[$i+1])) {
-			$this->roverPositions[] = $this->parseRoverPosition($lines[$i++]);
-			$this->roverInstructions[] = $this->parseRoverInstructions($lines[$i++]);
+			$this->parseRoverPosition($lines[$i++]);
+			$this->parseRoverInstructions($lines[$i++]);
 		}
 	}
 
-	private function fetchCommands($commandBlock)
+	public function parsePlatoDimensions($dimensions)
 	{
-		$lines = explode("\n", $commandBlock);
-		$lines = array_map('trim', $lines);
-		return array_diff($lines, [null, '']);
-	}
-
-	public function parseRoverInstructions($instructions)
-	{
-		if (!preg_match('/^[L|R|M]+$/', $instructions)) {
-			throw new CommandException('Rover #'.(count($this->roverInstructions)+1).' instruction is invalid.');
+		if (!preg_match('/^(\d+) (\d+)$/', $dimensions, $matches)) {
+			throw new CommandException('Plato dimensions are invalid.');
 		}
-		preg_match_all('/[L|R|M]/', $instructions, $matches);
-		return $matches[0];
+
+		$this->platoDimensions = new Coordinates([$matches[1], $matches[2]]);
 	}
 
 	public function parseRoverPosition($position)
@@ -43,15 +46,29 @@ class CommandParser
 		if (!preg_match('/^(\d+) (\d+) (N|S|E|W)$/', $position, $matches)) {
 			throw new CommandException('Rover #'.(count($this->roverPositions)+1).' position is invalid.');
 		}
-		return [(int)$matches[1], (int)$matches[2], $matches[3]];
+
+		$this->roverPositions[] = new RoverPosition(
+			new Coordinates([$matches[1], $matches[2]]),
+			new Direction($matches[3])
+		);
 	}
 
-	public function parsePlateauDimensions($dimensions)
+	public function parseRoverInstructions($instructions)
 	{
-		if (!preg_match('/^(\d+) (\d+)$/', $dimensions, $matches)) {
-			throw new CommandException('Plateau dimensions are invalid.');
+		if (!preg_match('/^[L|R|M]+$/', $instructions)) {
+			throw new CommandException('Rover #'.(count($this->roverInstructions)+1).' instructions are invalid.');
 		}
-		return [(int)$matches[1], (int)$matches[2]];
+		preg_match_all('/[L|R|M]/', $instructions, $matches);
+
+		$this->roverInstructions[] = $matches[0];
+	}
+
+	private function fetchCommands($commandBlock)
+	{
+		$lines = explode("\n", $commandBlock);
+		$lines = array_map('trim', $lines);
+
+		return array_diff($lines, [null, '']);
 	}
 
 	/**
@@ -74,9 +91,9 @@ class CommandParser
 		}
 	}
 
-	public function getPlateauDimensions()
+	public function getPlatoDimensions()
 	{
-		return $this->plateauDimensions;
+		return $this->platoDimensions;
 	}
 
 	public function getRoversPositions()
