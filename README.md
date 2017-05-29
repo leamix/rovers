@@ -12,11 +12,15 @@ Composer используется для установки **PHPUnit**. Так 
 
 `git clone https://github.com/leamix/rovers.git /local/path/to/rovers`
 
+Переместиться в директорию
+
+`cd /local/path/to/rovers`
+
 Выполнить команды для загрузки используемых библиотек:
 
-`bower update`
+`bower install`
 
-`composer update`
+`composer update --dev`
 
 Открыть в браузере страницу, соответствующую пути `/local/path/to/rovers/public/index.php`
 
