@@ -17,11 +17,11 @@ class CommandParser
 	 */
 	private $roverInstructions;
 
-	public function __construct($commandBlock)
+	public function __construct($command)
 	{
-		$this->ensureIsNotEmpty($commandBlock);
-		$this->ensureIsString($commandBlock);
-		$lines = $this->fetchCommands($commandBlock);
+		$this->ensureIsNotEmpty($command);
+		$this->ensureIsString($command);
+		$lines = $this->fetchCommands($command);
 		$i = 0;
 
 		$this->parsePlatoDimensions($lines[$i++]);
@@ -29,6 +29,10 @@ class CommandParser
 		while (isset($lines[$i]) && isset($lines[$i+1])) {
 			$this->parseRoverPosition($lines[$i++]);
 			$this->parseRoverInstructions($lines[$i++]);
+		}
+
+		if (empty($this->roverPositions) || empty($this->roverInstructions)) {
+			throw new CommandException('Command is incomplete.');
 		}
 	}
 
@@ -63,9 +67,9 @@ class CommandParser
 		$this->roverInstructions[] = $matches[0];
 	}
 
-	private function fetchCommands($commandBlock)
+	private function fetchCommands($command)
 	{
-		$lines = explode("\n", $commandBlock);
+		$lines = explode("\n", $command);
 		$lines = array_map('trim', $lines);
 
 		return array_diff($lines, [null, '']);
@@ -82,11 +86,11 @@ class CommandParser
 	}
 
 	/**
-	 * @param string $commandBlock
+	 * @param string $command
 	 */
-	private function ensureIsString($commandBlock)
+	private function ensureIsString($command)
 	{
-		if (!is_string($commandBlock)) {
+		if (!is_string($command)) {
 			throw new CommandException('Command must be a string.');
 		}
 	}

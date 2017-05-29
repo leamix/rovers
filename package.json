@@ -1,7 +1,7 @@
 {
   "name": "leamix/rovers",
   "author": "Alexander Levin",
-  "description": "NASA robotic rovers landed on Mars",
+  "description": "NASA robotic rovers landed on Mars...",
   "devDependencies": {
     "bower": "latest"
   },

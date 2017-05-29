@@ -16,20 +16,6 @@ IndexIgnore */*
 
 FileETag None
 
-<IfModule mod_rewrite.c>
-RewriteEngine on
-
-# yii routing
-RewriteCond %{REQUEST_URI} !(\.eot|\.svg|\.ttf|\.woff)$
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule . index.php
-</IfModule>
-
-AddType application/octet-stream .pdf
-AddType application/octet-stream .zip
-AddType application/octet-stream .rar
-
 AddDefaultCharset utf-8
 AddCharset utf-8 .html .css .js .xml .json .rss .php
 

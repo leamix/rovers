@@ -42,10 +42,12 @@ class Station
 	{
 		$data = [];
 
-		foreach ($this->rovers as $rover) {
-			$data[] = [
-				'position' => $rover->getPosition()
-			];
+		if (!empty($this->rovers)) {
+			foreach ($this->rovers as $rover) {
+				$data[] = [
+					'position' => $rover->getPosition()
+				];
+			}
 		}
 
 		return $data;
